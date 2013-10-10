@@ -3,10 +3,10 @@
 
 by [Ben Nadel][1] (on [Google+][2])
 
-For the past few months, at the recommendation of Jonah (thanks!), I've been slowly working my way
-through [Streamlined Object Modeling: Patterns, Rules, and Implementation][3] by Jill Nicola, Mark
-Mayfield, and Mike Abney. Object Oriented Programming (OOP) is a fairly new concept for me. Sure,
-I've been creating "components" for years but, not in an object-oriented sense; more like an 
+For the past few months, at the [recommendation of Jonah][recommended], I've been slowly working my
+way through [Streamlined Object Modeling: Patterns, Rules, and Implementation][book] by Jill Nicola, 
+Mark Mayfield, and Mike Abney. Object Oriented Programming (OOP) is a fairly new concept for me. 
+Sure, I've been creating "components" for years but, not in an object-oriented sense; more like an 
 encapsulated procedural sense. As such, evolving my brain to use "Object Think" is going to be a
 long, difficult journey. I've created this project to help me work through some of the principles
 that were covered in the book.
@@ -44,5 +44,6 @@ that I'll add and remove from this list.
 
 [1]: http://www.bennadel.com
 [2]: https://plus.google.com/108976367067760160494?rel=author
-[3]: http://amzn.to/19CdGIu
+[book]: http://amzn.to/19CdGIu
 [dunbar]: en.wikipedia.org/wiki/Dunbar's_number
+[recommended]: http://www.bennadel.com/blog/2470-What-If-All-User-Interface-UI-Data-Came-In-Reports-.htm#comments_42341

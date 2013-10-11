@@ -17,7 +17,7 @@ Blog Post: __to be determined__.
 
 ## [Live Demo][demo]
 
-While there's not really much to see in the demo, you can [view thew live demo here][demo] and open
+While there's not really much to see in the demo, you can [view the live demo here][demo] and open
 up your browser's console. This will show you that the modules are loading and are being tested.
 
 ## Domain Model And Business Rules

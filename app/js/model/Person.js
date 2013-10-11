@@ -1,5 +1,5 @@
 define(
-	[ "util" ],
+	[ "Util" ],
 	function( util ) {
 
 		// I represent a "generic" person.

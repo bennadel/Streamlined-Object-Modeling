@@ -15,6 +15,11 @@ that were covered in the book.
 
 Blog Post: __to be determined__.
 
+## [Live Demo][demo]
+
+While there's not really much to see in the demo, you can [view thew live demo here][demo] and open
+up your browser's console. This will show you that the modules are loading and are being tested.
+
 ## Domain Model And Business Rules
 
 I really enjoy working with human concepts (since they make sense in my head) and human 
@@ -56,3 +61,4 @@ After all of the modules are loaded in the main.js file, the fun will begin!
 [dunbar]: en.wikipedia.org/wiki/Dunbar's_number
 [recommended]: http://www.bennadel.com/blog/2470-What-If-All-User-Interface-UI-Data-Came-In-Reports-.htm#comments_42341
 [requirejs]: http://requirejs.org/
+[demo]: http://bennadel.github.io/Streamlined-Object-Modeling/app/

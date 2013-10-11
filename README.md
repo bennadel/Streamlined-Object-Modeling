@@ -30,16 +30,24 @@ drop lower than 1/4. Meaning, you cannot have a group with 5 men and 1 woman (or
 * Men and women cannot be in the same group of friends if they share a mutual attraction towards
 one another (you've seen When Harry Met Sally, right?).
 
-* Unrequited attractions are allowed; but, only if they don't create a love-triangle. Meaning, it's
-OK for Sarah to have a crush on Bob, only so long as Bob does _not_ have a crush on someone else. 
-This would only lead to unnecessary heart-ache in causal conversation.
+* Unrequited attractions are allowed; but, only if they do n0t create a love-triangle. Meaning, 
+it's OK for Sarah to have a crush on Bob, only so long as Bob does _not_ have a crush on someone 
+else. This would only lead to unnecessary heartache in causal conversation.
 
 * No person in the group can be under the age of 18 (we're all adults here).
 
 * People can belong to more than one social circle (ie, group of friends). 
 
-Anyway, that's just my first pass on the topic. As I start learning about this stuff, I'm sure 
+Anyway, that's just my first pass on the topic. As I start to learn more about this stuff, I'm sure
 that I'll add and remove from this list.
+
+## RequireJS Module Loading
+
+I've decided to use [RequireJS][requirejs] as my asynchronous model loader. This way, I don't have 
+to explicitly load each script; but, more importantly, RequireJS will keep me more honest about 
+defining each class as its own cohesive module.
+
+After all of the modules are loaded in the main.js file, the fun will begin!
 
 
 [1]: http://www.bennadel.com
@@ -47,3 +55,4 @@ that I'll add and remove from this list.
 [book]: http://amzn.to/19CdGIu
 [dunbar]: en.wikipedia.org/wiki/Dunbar's_number
 [recommended]: http://www.bennadel.com/blog/2470-What-If-All-User-Interface-UI-Data-Came-In-Reports-.htm#comments_42341
+[requirejs]: http://requirejs.org/

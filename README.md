@@ -46,6 +46,105 @@ else. This would only lead to unnecessary heartache in causal conversation.
 Anyway, that's just my first pass on the topic. As I start to learn more about this stuff, I'm sure
 that I'll add and remove from this list.
 
+## Business Rules - Implementation Strategies
+
+I'm a fan of rules and "best practices;" and, Streamlined Object Modeling has some really 
+interesting best practices around the way that business rule checking should be implemented within
+Objects. I'll try to recap what I've learned so far, partly for your [reader] benefit; but, mostly
+because it will help drive these concepts into my head as I prepare to write some code.
+
+### Property Rules
+
+I have always thought about "setters" as performing a single action. But, as they point out in the,
+book, setting a property actually consists of three distinct actions, each of which can be factored 
+out into a smaller, more cohesive methods:
+
+> Method cohesiveness essentially means that a method should do only one thing. Setting a property
+> involves doing three things: (1) checking the local validity of the new value, (2) checking the
+> business rule validity of the new value, and (3) assigning the new value. To maximize the method
+> cohesiveness of the property set accessor, isolate the business rule check and the value 
+> assignment into separate methods. This method-cohesive implementation has distinct advantages.
+> Isolating the business rule check allows subclasses to extend and override property rules by 
+> writing their own test methods. Isolating the value assignment allows bypassing the business 
+> rules when necessary... Organizing your code this way keeps you from having to refactor it 
+> later on. __(Location 4724)__
+
+According to this passage (and subsequent explanations), this means that setting a property leads
+to three methods:
+
+* __setValue( aValue )__: Sets the value of the property in the target object. This is the 
+"public" method called to coordinate the setting event.
+
+* __testSetValue( aValue )__: Tests the value against the object's property rules and raises an
+exception if the rule checking fails (or returns Void if all tests pass). This method is also 
+public because it can help with validation later on.
+
+* __doSetValue( aValue )__: Assigns the value to the object's property variable. This method 
+circumvents any validation as it assumes the "test" methods were already called. This method can
+also be "public" in order to help coordinate "collaboration" rules as well as to help object 
+creation from a persistent data store.
+
+#### Cross-Property Validation
+
+When you're dealing with a single property, the test() methods may be verbose; but, they are fairly
+straightforward. When you have to perform validation across multiple objects, however, it gets a
+bit more complicated. When testing for validation across multiple objects, the a test must be 
+performed in the current object; then, in the collaborating object (which may veto the validation
+and, therefore, the action).
+
+### Collaboration Rules
+
+Whereas property rules determine whether a property can be set, collaboration rules are the 
+business rules that determine whether a relationship between two objects can be created or 
+dissolved. And, like cross-property validation, collaboration rules must be validated by all 
+of the objects involved in the collaboration. This is true regardless of which object initiates the
+collaboration request.
+
+Like property accessors, it is recommended that collaboration accessors be split up into three 
+smaller cohesive methods that allow for pluggability and extension:
+
+* __add( aCollaborator )__: Adds the collaborator to the current object. This is the "public" 
+method coordinates the cross-object validation and application.
+
+* __testAdd( aCollaborator )__: Tests collaborator against the objects state and collaboration
+rules and raises an exception if the rule checking fails (or returns Void if all tests pass). This
+method is also "public" as it will give us the ability to streamline the cross-object validation
+(see below).
+
+* __doAdd( aCollaborator )__: Assigns or adds the collaborator to the object's properties. This
+method circumvents validation as it assumes the "test" methods were already called. This method
+can also be "public" in order to help object creation from a persistent store.
+
+*__NOTE__: The use of "add" does not imply that all collaborators are collections of objects. 
+Setting a single collaborator is an "add" so as to differentiate from a property accessor.*
+
+#### Streamlining Collaboration Accessors
+
+Since collaborative rule checking requires that all [involved] objects perform rule checking,
+the process can be streamlined by electing one object as the "coordinator." The other objects can
+then defer to this object to execute the majority of the work-flow. This means that one object will
+be responsible for calling the "test" and "do" methods for both objects. 
+
+Notice, however, that while this approach cuts down on code duplication, the work-flow still defers
+to the appropriate objects for logic and execution. We are not creating __God Objects__:
+
+> All the collaboration rules cannot be consolidated in one object. While putting all rules 
+> in one place may make the implementation easier in the short-term, it destroys pluggability,
+> extensibility, and scalability. __(Location 4921)__
+
+When determining which object will play the role of coordinator, follow the principle of, "Most 
+Specific Carries the Load":
+
+* Generic delegates to Specific.
+* Whole delegates to a Part.
+* Specific delegates to a Transaction.
+
+### Possible Topics To "Flesh-Out"
+
+* Rolling-back a partially-valid collaboration.
+* Conflict collaboration rules.
+* Other....s
+
 ## RequireJS Module Loading
 
 I've decided to use [RequireJS][requirejs] as my asynchronous model loader. This way, I don't have 

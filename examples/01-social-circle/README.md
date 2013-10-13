@@ -3,6 +3,8 @@
 
 by [Ben Nadel][bennadel] (on [Google+][goggle-plus])
 
+[View the Live Demo][demo]
+
 I really enjoy working with human concepts (since they make sense in my head) and human 
 interactions. As such, I thought it would be fun (and complex enough) to try to model the rules 
 that surround a group of friends. Each group will be composed of one or more people, including both
@@ -24,9 +26,12 @@ else. This would only lead to unnecessary heartache in causal conversation.
 
 * People can belong to more than one social circle (ie, group of friends). 
 
+* No person can have an attraction to themselves (ie, no narcissists here, please).
+
 Anyway, that's just my first pass on the topic. As I start to learn more about this stuff, I'm sure
 that I'll add and remove from this list.
 
 
 [bennadel]: http://www.bennadel.com
 [goggle-plus]: https://plus.google.com/108976367067760160494?rel=author
+[demo]: http://bennadel.github.io/Streamlined-Object-Modeling/examples/01-social-circle/

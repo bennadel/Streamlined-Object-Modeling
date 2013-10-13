@@ -141,4 +141,3 @@ After all of the modules are loaded in the main.js file, the fun will begin!
 [dunbar]: en.wikipedia.org/wiki/Dunbar's_number
 [recommended]: http://www.bennadel.com/blog/2470-What-If-All-User-Interface-UI-Data-Came-In-Reports-.htm#comments_42341
 [requirejs]: http://requirejs.org/
-[demo]: http://bennadel.github.io/Streamlined-Object-Modeling/app/

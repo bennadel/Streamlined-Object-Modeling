@@ -15,14 +15,14 @@ that were covered in the book.
 
 Blog Post: __to be determined__.
 
-## [Live Demo][demo]
+## Examples And Explorations
 
 While there's not really much to see in the demos, as far as visuals are concerned, you can see 
 the results in the browser's console. Since there are several types of objects and many types of
 collaborations, I don't think any one example or exploration is going to help. Each one of these 
 will help me look at different types of object models:
 
-* [Social Circle and Friends][./examples/01-social-circle/]
+* [Social Circle and Friends](./examples/01-social-circle/)
 
 And, please, any feedback or input about any one of these examples would be extermely welcome! This
 stuff is so new and so foreign to me that I need all the help I can get.

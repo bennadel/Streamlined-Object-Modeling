@@ -25,7 +25,7 @@ stuff is so new and so foreign to me that I need all the help I can get.
 
 ## About The Book
 
-Blog Post: _to be determined_.
+__Blog Post__: _to be determined_.
 
 In the following sections, I am attempting to outline important notes about 
 [Streamlined Object Modeling][book] that I can refer to as I am building out my examples. The book 
@@ -83,7 +83,7 @@ As each of these objects is assembled into a object modeling pattern, they are r
 
 ## Business Rules - Implementation Strategies
 
-I'm a fan of rules and "best practices;" and, [Streamlined Object Modeling[book] has some really 
+I'm a fan of rules and "best practices;" and, [Streamlined Object Modeling][book] has some really 
 interesting best practices around the way that business rule checking should be implemented within
 Objects. I'll try to recap what I've learned so far, partly for your [reader] benefit; but, mostly
 because it will help drive these concepts into my head as I prepare to write some code.

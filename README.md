@@ -17,34 +17,15 @@ Blog Post: __to be determined__.
 
 ## [Live Demo][demo]
 
-While there's not really much to see in the demo, you can [view the live demo here][demo] and open
-up your browser's console. This will show you that the modules are loading and are being tested.
+While there's not really much to see in the demos, as far as visuals are concerned, you can see 
+the results in the browser's console. Since there are several types of objects and many types of
+collaborations, I don't think any one example or exploration is going to help. Each one of these 
+will help me look at different types of object models:
 
-## Domain Model And Business Rules
+* [Social Circle and Friends][./examples/01-social-circle/]
 
-I really enjoy working with human concepts (since they make sense in my head) and human 
-interactions. As such, I thought it would be fun (and complex enough) to try to model the rules 
-that surround a group of friends. Each group will be composed of one or more people, including both
-men and women. But, the following rules apply:
-
-* No group of friends can be larger than 150 members, according to [Dunbar's number][dunbar].
-
-* Men and women can be in the same group, so long as the ratio of one gender to the other does not
-drop lower than 1/4. Meaning, you cannot have a group with 5 men and 1 woman (or vice-versa).
-
-* Men and women cannot be in the same group of friends if they share a mutual attraction towards
-one another (you've seen When Harry Met Sally, right?).
-
-* Unrequited attractions are allowed; but, only if they do n0t create a love-triangle. Meaning, 
-it's OK for Sarah to have a crush on Bob, only so long as Bob does _not_ have a crush on someone 
-else. This would only lead to unnecessary heartache in causal conversation.
-
-* No person in the group can be under the age of 18 (we're all adults here).
-
-* People can belong to more than one social circle (ie, group of friends). 
-
-Anyway, that's just my first pass on the topic. As I start to learn more about this stuff, I'm sure
-that I'll add and remove from this list.
+And, please, any feedback or input about any one of these examples would be extermely welcome! This
+stuff is so new and so foreign to me that I need all the help I can get.
 
 ## Business Rules - Implementation Strategies
 

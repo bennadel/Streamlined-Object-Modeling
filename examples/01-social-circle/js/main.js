@@ -5,8 +5,7 @@
 require.config({
 	baseUrl: "js/model/",
 	paths: {
-		lodash: "../vendor/lodash/lodash-2.2.1",
-		vendor: "../vendor/"
+		lodash: "../../../vendor/lodash/lodash-2.2.1"
 	},
 	shim: {
 		lodash: {

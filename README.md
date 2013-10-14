@@ -25,7 +25,7 @@ stuff is so new and so foreign to me that I need all the help I can get.
 
 ## About The Book
 
-__Blog Post__: _to be determined_.
+__Blog Post__: [Streamlined Object Modeling][blog-post], October 14, 2013.
 
 In the following sections, I am attempting to outline important notes about 
 [Streamlined Object Modeling][book] that I can refer to as I am building out my examples. The book 
@@ -199,6 +199,6 @@ file (once all of the JavaScript modules have loaded).
 [1]: http://www.bennadel.com
 [2]: https://plus.google.com/108976367067760160494?rel=author
 [book]: http://amzn.to/19CdGIu
-[dunbar]: en.wikipedia.org/wiki/Dunbar's_number
+[blog-post]: http://www.bennadel.com/blog/2546-Streamlined-Object-Modeling-Patterns-Rules-And-Implementation.htm
 [recommended]: http://www.bennadel.com/blog/2470-What-If-All-User-Interface-UI-Data-Came-In-Reports-.htm#comments_42341
 [requirejs]: http://requirejs.org/

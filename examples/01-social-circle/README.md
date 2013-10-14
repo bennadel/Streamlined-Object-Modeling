@@ -35,3 +35,4 @@ that I'll add and remove from this list.
 [bennadel]: http://www.bennadel.com
 [goggle-plus]: https://plus.google.com/108976367067760160494?rel=author
 [demo]: http://bennadel.github.io/Streamlined-Object-Modeling/examples/01-social-circle/
+[dunbar]: http://en.wikipedia.org/wiki/Dunbar's_number

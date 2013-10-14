@@ -17,14 +17,22 @@ require.config({
 
 // Build, join, test, and have fun with the model.
 require(
-	[ "Person" ],
-	function( Person ) {
+	[ "DateOfBirth", "Person" ],
+	function( DateOfBirth, Person ) {
 
 
 		console.log( "Modules have been defined." );
 		console.log( "Main:" );
 
-		console.log( Person );
+		
+		var tricia = new Person( "Tricia Smith", "F", "1980/01/15" );
+
+		console.log( tricia );
+
+
+		var dob = new DateOfBirth( "September 1, 1978" );
+
+		console.log( dob.isYoungerThan( 31 ) );
 
 
 	}

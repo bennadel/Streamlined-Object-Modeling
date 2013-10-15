@@ -21,6 +21,14 @@ define(
 			},
 
 
+			// I determine if the current date of birth equals the given date of birth.
+			equals: function( aDateOfBirth ) {
+
+				return( this.date.getTime() === aDateOfBirth.getDate().getTime() );
+
+			},
+
+
 			// I return the age (in years).
 			getAge: function() {
 

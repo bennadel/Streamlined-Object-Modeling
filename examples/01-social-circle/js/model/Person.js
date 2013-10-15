@@ -3,9 +3,8 @@ define(
 	function( util ) {
 
 		// I represent a "generic" person.
-		function Person( aID, aName, aGender, aDateOfBirth ) {
+		function Person( aName, aGender, aDateOfBirth ) {
 
-			this.setID( aID );
 			this.setName( aName );
 			this.setGender( aGender );
 			this.setDateOfBirth( aDateOfBirth );
@@ -61,14 +60,6 @@ define(
 			},
 
 
-			// I set the ID without any validation.
-			doSetID: function( newID ) {
-
-				this.id = newID;
-
-			},
-
-
 			// I set the name value without any validation.
 			doSetName: function( newName ) {
 
@@ -86,16 +77,11 @@ define(
 
 				}
 
-				// Since data persistence requires these objects to have a unique ID, if they
-				// have not yet been persisted, we can't really compare them properly. Default
-				// to simply checking object references.
-				if ( ! ( this.id && aPerson.getID() ) ) {
-
-					return( this === aPerson );
-
-				}
-
-				return( this.id === aPerson.getID() );
+				return(
+					( this.name === aPerson.getName() ) &&
+					( this.gender === aPerson.getGender() ) &&
+					this.dateOfBirth.equals( aPerson.getDateOfBirth() )
+				);
 
 			},
 
@@ -194,19 +180,6 @@ define(
 			},
 
 
-			// I set the ID (with validation constraints).
-			setID: function( newID ) {
-
-				newID = ( newID || 0 );
-
-				this.testSetID( newID );
-				this.doSetID( newID );
-
-				return( this );
-
-			},
-
-
 			// I set the name (with validation constraints).
 			setName: function( newName ) {
 
@@ -250,18 +223,6 @@ define(
 				if ( this.gender ) {
 
 					throw( new Error( "Gender reassignment not currently implemented." ) );
-
-				}
-
-			},
-
-
-			// I test to make sure the given ID can be set.
-			testSetID: function( newID ) {
-
-				if ( this.id ) {
-
-					throw( new Error( "ID cannot be changed once it is set" ) );
 
 				}
 

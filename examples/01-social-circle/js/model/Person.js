@@ -3,8 +3,9 @@ define(
 	function( util ) {
 
 		// I represent a "generic" person.
-		function Person( aName, aGender, aDateOfBirth ) {
+		function Person( aID, aName, aGender, aDateOfBirth ) {
 
+			this.setID( aID );
 			this.setName( aName );
 			this.setGender( aGender );
 			this.setDateOfBirth( aDateOfBirth );
@@ -27,6 +28,14 @@ define(
 			doSetGender: function( newGender ) {
 
 				this.gender = newGender;
+
+			},
+
+
+			// I set the ID without any validation.
+			doSetID: function( newID ) {
+
+				this.id = newID;
 
 			},
 
@@ -82,16 +91,10 @@ define(
 			// I set the date of birth (with validation constraints).
 			setDateOfBirth: function( newDateOfBirth ) {
 
-				if ( ! ( newDateOfBirth instanceof Date ) ) {
+				if ( ! newDateOfBirth ) {
 
-					newDateOfBirth = new Date( newDateOfBirth );
-
-				}
-
-				if ( isNaN( newDateOfBirth.getTime() ) ) {
-
-					throw( new Error( "Date of Birth is not a date." ) );
-
+					throw( new Error( "Date of Birth is null." ) );
+					
 				}
 
 				this.testSetDateOfBirth( newDateOfBirth );
@@ -121,6 +124,23 @@ define(
 			},
 
 
+			// I set the ID (with validation constraints).
+			setID: function( newID ) {
+
+				if ( ! newID ) {
+
+					throw( new Error( "ID is null or zero." ) );
+
+				}
+
+				this.testSetID( newID );
+				this.doSetID( newID );
+
+				return( this );
+
+			},
+
+
 			// I set the name (with validation constraints).
 			setName: function( newName ) {
 
@@ -143,15 +163,7 @@ define(
 			// I test to make sure the given date of birth can be set.
 			testSetDateOfBirth: function( newDateOfBirth ) {
 
-				var now = new Date();
-
-				if ( newDateOfBirth > now ) {
-
-					throw( new Error( "Attempt to bend the space-time continuum." ) );
-
-				}
-
-				if ( util.dateDiff( "Y", newDateOfBirth, now ) > 120 ) {
+				if ( newDateOfBirth.isAgeGT( 120 ) ) {
 
 					throw( new Error( "Age is not valid." ) );
 
@@ -165,13 +177,25 @@ define(
 
 				if ( ( newGender !== "M" ) && ( newGender !== "F" ) ) {
 
-					throw( new Error( "Gender selection is not supported." ) );
+					throw( new Error( "Gender definition is not supported." ) );
 
 				}
 
 				if ( this.gender ) {
 
 					throw( new Error( "Gender reassignment not currently implemented." ) );
+
+				}
+
+			},
+
+
+			// I test to make sure the given ID can be set.
+			testSetID: function( newID ) {
+
+				if ( this.id ) {
+
+					throw( new Error( "ID cannot be changed once it is set" ) );
 
 				}
 

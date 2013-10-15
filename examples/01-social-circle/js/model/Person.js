@@ -10,11 +10,40 @@ define(
 			this.setGender( aGender );
 			this.setDateOfBirth( aDateOfBirth );
 
+			// Since a person can exist without attractions, we'll defer the populating of the 
+			// attractions collection until after instantiation.
+			this.attractions = [];
+
 		}
 
 
 		// Define the instance methods.
 		Person.prototype = {
+
+			// I add the given attraction.
+			addAttraction: function( aAttraction ) {
+
+				if ( ! aAttraction ) {
+
+					throw( new Error( "Attraction is null." ) );
+
+				}
+
+				// Defer to the attraction instance to coordinate the relationship. I *believe* that
+				// this is an instance of "whole delegates to part", since this attraction is just 
+				// one in the collection of attractions? Not really sure.
+				aAttraction.addPerson( this );
+
+			},
+
+
+			// I add the given attraction without any validation.
+			doAddAttraction: function( newAttraction ) {
+
+				this.attractions.push( newAttraction );
+
+			},
+
 
 			// I set the date of birth without any validation.
 			doSetDateOfBirth: function( newDateOfBirth ) {
@@ -48,6 +77,29 @@ define(
 			},
 
 
+			// I determine if this person is equal to the given instance.
+			equals: function( aPerson ) {
+
+				if ( ! aPerson ) {
+
+					return( false );
+
+				}
+
+				// Since data persistence requires these objects to have a unique ID, if they
+				// have not yet been persisted, we can't really compare them properly. Default
+				// to simply checking object references.
+				if ( ! ( this.id && aPerson.getID() ) ) {
+
+					return( this === aPerson );
+
+				}
+
+				return( this.id === aPerson.getID() );
+
+			},
+
+
 			// I return the date of birth property.
 			getDateOfBirth: function() {
 
@@ -68,6 +120,24 @@ define(
 			getName: function() {
 
 				return( this.name );
+
+			},
+
+
+			// I determine if the person already has an attraction to the given person.
+			isAttractedTo: function( aPerson ) {
+
+				for ( var i = 0 ; i < this.attractions.length ; i++ ) {
+
+					if ( this.attractions[ i ].targets( aPerson ) ) {
+
+						return( true );
+
+					}
+
+				}
+
+				return( false );
 
 			},
 

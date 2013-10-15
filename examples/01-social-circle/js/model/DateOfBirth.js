@@ -24,7 +24,9 @@ define(
 			// I return the age (in years).
 			getAge: function() {
 
-				return( util.dateDiff( "Y", this.date, new Date() ) );
+				var now = new Date();
+
+				return( now.getFullYear() - this.date.getFullYear() );
 
 			},
 
@@ -37,25 +39,48 @@ define(
 			},
 
 
-			// I determine if the date of birth is older than the given years. This calculation 
-			// is INCLUSIVE of the given age.
-			isOlderThan: function( ageInYears ) {
+			// I determine if the calculated age is equal to the given age (in years).
+			isAgeEQ: function( ageInYears ) {
+
+				return( this.getAge() === ageInYears );
+
+			},
+
+			
+			// I determine if the calculated age is greater-than the given age (in years).
+			isAgeGT: function( ageInYears ) {
+
+				return( this.getAge() > ageInYears );
+
+			},
+
+
+			// I determine if the calculated age is greater-than or equal-to the given age (in years).
+			isAgeGTE: function( ageInYears ) {
 
 				return( this.getAge() >= ageInYears );
 
 			},
 
 
-			// I determien if the date of birth is younger than the given years. This calculation
-			// is EXLCUSIVE of the given age.
-			isYoungerThan: function( ageInYears ) {
+			// I determine if the calculated age is less-than the given age (in years).
+			isAgeLT: function( ageInYears ) {
 
 				return( this.getAge() < ageInYears );
 
 			},
 
 
-			// I set the date (with validation constraints).
+			// I determine if the calculated age is less-than or equal-to the given age (in years).
+			isAgeLTE: function( ageInYears ) {
+
+				return( this.getAge() >= ageInYears );
+
+			},
+
+
+			// I set the date (with validation constraints). The date can be an actual Date object;
+			// or it can be a prasable date string.
 			setDate: function( newDate ) {
 
 				if ( ! ( newDate instanceof Date ) ) {

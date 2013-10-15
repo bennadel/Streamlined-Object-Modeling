@@ -25,14 +25,16 @@ require(
 		console.log( "Main:" );
 
 		
-		var tricia = new Person( "Tricia Smith", "F", "1980/01/15" );
+		// var tricia = new Person( "Tricia Smith", "F", "1980/01/15" );
+		// console.log( tricia );
 
-		console.log( tricia );
 
-
-		var dob = new DateOfBirth( "September 1, 1978" );
-
-		console.log( dob.isYoungerThan( 31 ) );
+		var dob = new DateOfBirth( "September 1, 1980" );
+		console.log( dob.isAgeLT( 33 ) );
+		console.log( dob.isAgeLTE( 33 ) );
+		console.log( dob.isAgeEQ( 33 ) );
+		console.log( dob.isAgeGTE( 33 ) );
+		console.log( dob.isAgeGT( 33 ) );
 
 
 	}

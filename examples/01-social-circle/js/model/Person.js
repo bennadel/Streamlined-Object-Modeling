@@ -127,11 +127,7 @@ define(
 			// I set the ID (with validation constraints).
 			setID: function( newID ) {
 
-				if ( ! newID ) {
-
-					throw( new Error( "ID is null or zero." ) );
-
-				}
+				newID = ( newID || 0 );
 
 				this.testSetID( newID );
 				this.doSetID( newID );

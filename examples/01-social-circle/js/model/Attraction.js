@@ -31,6 +31,21 @@ define(
 			},
 
 
+			// I add the target collaborator.
+			addTarget: function( newTarget ) {
+
+				if ( ! newTarget ) {
+
+					throw( new Error( "Target is null." ) );
+
+				}
+
+				this.testAddTarget( newTarget );
+				this.doAddTarget( newTarget );
+
+			},
+
+
 			// I add the owner collaborator (without any validation).
 			doAddOwner: function( newOwner ) {
 
@@ -74,6 +89,14 @@ define(
 			},
 
 
+			// I determine if the current attraction is owned by the given person.
+			isOwnedBy: function( aPerson ) {
+
+				return( this.owner.equals( aPerson ) );
+
+			},
+
+
 			// Determine if this attraction targets the given person.
 			targets: function( aPerson ) {
 
@@ -103,6 +126,34 @@ define(
 					if ( newOwner.isAttractedTo( this.target ) ) {
 
 						throw( new Error( "Attraction already exists." ) );
+
+					}
+
+				}
+
+			},
+
+
+			// I test to make sure the given target can be added.
+			testAddTarget: function( newTarget ) {
+
+				if ( this.target ) {
+
+					throw( new Error( "Target cannot be changed." ) );
+
+				}
+
+				// If the owner has already been set, we can test against it.
+				// --
+				// NOTE: We know that this method will *really* only ever be called once the
+				// owner has been called; however, that creates a connaissance-of-time problem
+				// in which the developer has to make sure never to change the order of the calls.
+				// We can get around this by adding this simple, bi-directional check.
+				if ( this.owner ) {
+
+					if ( this.owner.equals( newTarget ) ) {
+
+						throw( new Error( "Narcissist." ) );
 
 					}
 

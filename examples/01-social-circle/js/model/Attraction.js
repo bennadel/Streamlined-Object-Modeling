@@ -115,6 +115,11 @@ define(
 				}
 
 				// If the target has already been set, we can test against it.
+				// --
+				// NOTE: We know that this method will *really* only ever be called before the
+				// target has been set (in the constructor); however, that creates a connaissance-
+				// of-time problem in which the developer has to make sure never to change the order
+				// of the calls. We can get around this by adding this simple, bi-directional check.
 				if ( this.target ) {
 
 					if ( this.target.equals( newOwner ) ) {
@@ -146,9 +151,9 @@ define(
 				// If the owner has already been set, we can test against it.
 				// --
 				// NOTE: We know that this method will *really* only ever be called once the
-				// owner has been called; however, that creates a connaissance-of-time problem
-				// in which the developer has to make sure never to change the order of the calls.
-				// We can get around this by adding this simple, bi-directional check.
+				// owner has been set (in the constructor); however, that creates a connaissance-
+				// of-time problem in which the developer has to make sure never to change the order 
+				// of the calls. We can get around this by adding this simple, bi-directional check.
 				if ( this.owner ) {
 
 					if ( this.owner.equals( newTarget ) ) {

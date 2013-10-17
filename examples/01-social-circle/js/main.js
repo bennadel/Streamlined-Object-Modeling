@@ -17,8 +17,8 @@ require.config({
 
 // Build, join, test, and have fun with the model.
 require(
-	[ "DateOfBirth", "Person", "Attraction" ],
-	function( DateOfBirth, Person, Attraction ) {
+	[ "DateOfBirth", "Person" ],
+	function( DateOfBirth, Person ) {
 
 
 		console.log( "Modules have been defined." );
@@ -51,28 +51,17 @@ require(
 		var joanna = new Person( "Joanna Smith", "F", new DateOfBirth( "1978/01/30" ) );
 		var jason = new Person( "Jason Smith", "M", new DateOfBirth( "1979/03/12" ) );
 
-		var attraction = new Attraction( joanna, jason );
+		
+		joanna.addAttraction( jason );
 
 
 		console.log( "Joanna likes Jason:", joanna.isAttractedTo( jason ) );
 
-		console.log( "Owned by Joanna:", attraction.isOwnedBy( joanna ) );
-
-		// Make sure owner cannot be changed.
-		try {
-
-			attraction.addOwner( jason );
-
-		} catch ( error ) {
-
-			console.log( error );
-
-		}
 
 		// Make sure owner and target cannot be the same.
 		try {
 
-			var attraction = new Attraction( joanna, joanna );
+			joanna.addAttraction( jason );
 
 		} catch ( error ) {
 
@@ -80,8 +69,11 @@ require(
 
 		}
 
-		console.log( joanna );
-		console.log( attraction );
+		console.log( joanna.getAttractions() );
+
+		joanna.removeAttraction( jason );
+		
+		console.log( joanna.getAttractions() );
 
 
 	}

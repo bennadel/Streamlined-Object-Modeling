@@ -20,26 +20,41 @@ define(
 		Person.prototype = {
 
 			// I add the given attraction.
-			addAttraction: function( aAttraction ) {
+			addAttraction: function( newPerson ) {
 
-				if ( ! aAttraction ) {
+				if ( ! newPerson ) {
 
-					throw( new Error( "Attraction is null." ) );
+					throw( new Error( "Person is null." ) );
 
 				}
 
-				// Defer to the attraction instance to coordinate the relationship. I *believe* that
-				// this is an instance of "whole delegates to part", since this attraction is just 
-				// one in the collection of attractions? Not really sure.
-				aAttraction.addPerson( this );
+				this.testAddAttraction( newPerson );
+				this.doAddAttraction( newPerson );
 
 			},
 
 
 			// I add the given attraction without any validation.
-			doAddAttraction: function( newAttraction ) {
+			doAddAttraction: function( aPerson ) {
 
-				this.attractions.push( newAttraction );
+				this.attractions.push( aPerson );
+
+			},
+
+
+			// I dissolve the attraction to the given person without any validation.
+			doRemoveAttraction: function( aPerson ) {
+
+				for ( var i = 0, length = this.attractions.length ; i < length ; i++ ) {
+
+					if ( this.attractions[ i ].equals( aPerson ) ) {
+
+						this.attractions.splice( i, 1 );
+						return;
+
+					}
+
+				}
 
 			},
 
@@ -86,6 +101,16 @@ define(
 			},
 
 
+			// I return the collection of current attractions.
+			getAttractions: function() {
+
+				// NOTE: Using slice() here so the underlying array cannot be mutated without
+				// going through the proper channels. 
+				return( this.attractions.slice() );
+
+			},
+
+
 			// I return the date of birth property.
 			getDateOfBirth: function() {
 
@@ -115,7 +140,7 @@ define(
 
 				for ( var i = 0 ; i < this.attractions.length ; i++ ) {
 
-					if ( this.attractions[ i ].targets( aPerson ) ) {
+					if ( this.attractions[ i ].equals( aPerson ) ) {
 
 						return( true );
 
@@ -140,6 +165,21 @@ define(
 			isMale: function() {
 
 				return( this.gender === "M" );
+
+			},
+
+
+			// I dissolve the attraction to the given person.
+			removeAttraction: function( aPerson ) {
+
+				if ( ! aPerson ) {
+
+					throw( new Error( "Person is null." ) );
+
+				}
+
+				this.testRemoveAttraction( aPerson );
+				this.doRemoveAttraction( aPerson );
 
 			},
 
@@ -195,6 +235,33 @@ define(
 				this.doSetName( newName );
 
 				return( this );
+
+			},
+
+
+			// I test to make sure the given person can be added as an attraction.
+			testAddAttraction: function( newPerson ) {
+
+				if ( this.equals( newPerson ) ) {
+
+					throw( new Error( "Narcissist." ) );
+
+				}
+
+				if ( this.isAttractedTo( newPerson ) ) {
+
+					throw( new Error( "Attraction already exists." ) );
+
+				}
+
+			},
+
+
+			// I test to make sure the attraction to the given person can be dissolved.
+			testRemoveAttraction: function( aPerson ) {
+
+				// There's no point in testing to make sure the person is actually an attraction -
+				// trying to remove an attaction that doesn't exist will not throw an error.
 
 			},
 

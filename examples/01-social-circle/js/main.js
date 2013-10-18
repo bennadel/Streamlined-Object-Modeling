@@ -17,8 +17,8 @@ require.config({
 
 // Build, join, test, and have fun with the model.
 require(
-	[ "DateOfBirth", "Person" ],
-	function( DateOfBirth, Person ) {
+	[ "DateOfBirth", "Person", "SocialCircle" ],
+	function( DateOfBirth, Person, SocialCircle ) {
 
 
 		console.log( "Modules have been defined." );
@@ -48,32 +48,39 @@ require(
 		};
 
 
-		var joanna = new Person( "Joanna Smith", "F", new DateOfBirth( "1978/01/30" ) );
-		var jason = new Person( "Jason Smith", "M", new DateOfBirth( "1979/03/12" ) );
+		var socialCircle = new SocialCircle();
 
+		socialCircle.addPerson( people.women[ 0 ] );
+		socialCircle.addPerson( people.men[ 0 ] );
 		
-		joanna.addAttraction( jason );
-
-
-		console.log( "Joanna likes Jason:", joanna.isAttractedTo( jason ) );
-
-
-		// Make sure owner and target cannot be the same.
-		try {
-
-			joanna.addAttraction( jason );
-
-		} catch ( error ) {
-
-			console.log( error );
-
-		}
-
-		console.log( joanna.getAttractions() );
-
-		joanna.removeAttraction( jason );
+		socialCircle.addPerson( people.women[ 1 ] );
+		socialCircle.addPerson( people.men[ 1 ] );
 		
-		console.log( joanna.getAttractions() );
+		socialCircle.addPerson( people.women[ 2 ] );
+		socialCircle.addPerson( people.men[ 2 ] );
+		
+		socialCircle.addPerson( people.women[ 3 ] );
+		socialCircle.addPerson( people.men[ 3 ] );
+		
+		socialCircle.addPerson( people.women[ 4 ] );
+		socialCircle.addPerson( people.men[ 4 ] );
+		
+		socialCircle.addPerson( people.women[ 5 ] );
+		socialCircle.addPerson( people.men[ 5 ] );
+		
+		socialCircle.addPerson( people.women[ 6 ] );
+		socialCircle.addPerson( people.men[ 6 ] );
+
+
+		var tricia = people.women[ 0 ];
+		var sarah = people.women[ 2 ];
+		var vincent = people.men[ 0 ];
+
+		tricia.addAttraction( vincent );
+		vincent.addAttraction( sarah );
+
+
+		console.log( socialCircle );
 
 
 	}

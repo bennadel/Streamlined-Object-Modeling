@@ -13,6 +13,10 @@ define(
 			// attractions collection until after instantiation.
 			this.attractions = [];
 
+			// Since a person can exist without social circles, we'll defer the populating of the
+			// social circles collection until after instantiation.
+			this.socialCircles = [];
+
 		}
 
 
@@ -34,6 +38,22 @@ define(
 			},
 
 
+			// I add the given social circle.
+			addSocialCircle: function( newSocialCircle ) {
+
+				if ( ! newSocialCircle ) {
+
+					throw( new Error( "Social Circle is null." ) );
+
+				}
+
+				this.testAddSocialCircle( newSocialCircle );
+				this.doAddSocialCircle( newSocialCircle );
+				newSocialCircle.doAddPerson( this );
+
+			},
+
+
 			// I add the given attraction without any validation.
 			doAddAttraction: function( aPerson ) {
 
@@ -42,19 +62,26 @@ define(
 			},
 
 
+			// I add the given social circle without any validation.
+			doAddSocialCircle: function( aSocialCircle ) {
+
+				this.socialCircles.push( aSocialCircle );
+
+			},
+
+
 			// I dissolve the attraction to the given person without any validation.
 			doRemoveAttraction: function( aPerson ) {
 
-				for ( var i = 0, length = this.attractions.length ; i < length ; i++ ) {
+				this.attractions = util.withoutEquals( this.attractions, aPerson );
 
-					if ( this.attractions[ i ].equals( aPerson ) ) {
+			},
 
-						this.attractions.splice( i, 1 );
-						return;
 
-					}
+			// I dissolve the social circle membership without any validation.
+			doRemoveSocialCircle: function( aSocialCircle ) {
 
-				}
+				this.socialCircles = util.withoutEquals( this.socialCircles, aSocialCircle );
 
 			},
 
@@ -101,6 +128,14 @@ define(
 			},
 
 
+			// I return the age (in years).
+			getAge: function() {
+
+				return( this.dateOfBirth.getAge() );
+
+			},
+
+
 			// I return the collection of current attractions.
 			getAttractions: function() {
 
@@ -138,17 +173,7 @@ define(
 			// I determine if the person already has an attraction to the given person.
 			isAttractedTo: function( aPerson ) {
 
-				for ( var i = 0 ; i < this.attractions.length ; i++ ) {
-
-					if ( this.attractions[ i ].equals( aPerson ) ) {
-
-						return( true );
-
-					}
-
-				}
-
-				return( false );
+				return( util.anyEquals( this.attractions, aPerson ) );
 
 			},
 
@@ -157,6 +182,14 @@ define(
 			isFemale: function() {
 
 				return( this.gender === "F" );
+
+			},
+
+
+			// I determine if this person is part of the given social circle.
+			isInSocialCircle: function( aSocialCircle ) {
+
+				return( util.anyEquals( this.socialCircles, aSocialCircle ) );
 
 			},
 
@@ -253,6 +286,29 @@ define(
 					throw( new Error( "Attraction already exists." ) );
 
 				}
+
+				// Since attractions play an integral role in the way that social circles are 
+				// constrained, we have to check with the social circle before we can create
+				// a new attraction.
+				for ( var i = 0, length = this.socialCircles.length ; i < length ; i++ ) {
+
+					this.socialCircles[ i ].testAddPersonAttractionConflict( this, newPerson );
+
+				}
+
+			},
+
+
+			// I test to make sure the given social circle can be added.
+			testAddSocialCircle: function( newSocialCircle ) {
+
+				if ( this.isInSocialCircle( newSocialCircle ) ) {
+
+					throw( new Error( "Person is already in Social Circle." ) );
+
+				}
+
+				newSocialCircle.testAddPersonConflict( this );
 
 			},
 

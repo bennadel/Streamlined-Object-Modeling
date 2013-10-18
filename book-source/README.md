@@ -1,5 +1,5 @@
 
-# Streamlined Object Modeling - Java Source Code
+# Java Source Code (From Book)
 
 This is the Java source code that accompanies the [Streamlined Object Modeling][book]. I'm 
 reproducing it here ([original source][source]) because I find that I need to reference it a lot

@@ -128,6 +128,13 @@ define(
 			// the given target would create a love-triangle.
 			testAddPersonAttractionConflict: function( aPerson, newAttraction ) {
 
+				// This is somewhat complicated because constraint works in two ways - each of the
+				// people involved could be the man-in-the-middle, so to speak. Meaning, if we are
+				// about to create an attraction between A + B, we run into a problem if:
+				// 
+				// - B already has an attraction to someone else (X) in the social circle, creating A-B-X.
+				// - Someone else (X) in the cicrle already has an attraction to A, creating X-A-B. 
+
 				for ( var i = 0, length = this.persons.length ; i < length ; i++ ) {
 
 					var trianglePerson = this.persons[ i ];
@@ -138,7 +145,15 @@ define(
 
 					}
 
+					// Test Case: B is already attracted to someone else (X) => A-B-X.
 					if ( newAttraction.isAttractedTo( trianglePerson ) ) {
+
+						throw( new Error( "Attraction would create a love triangle." ) );
+
+					}
+
+					// Test Case: X is already attracted to A => X-A-B.
+					if ( trianglePerson.isAttractedTo( aPerson ) ) {
 
 						throw( new Error( "Attraction would create a love triangle." ) );
 

@@ -7,7 +7,19 @@ define(
 		function Friend( aPerson, aSocialCircle ) {
 
 			this.addPerson( aPerson );
-			this.addSocialCircle( aSocialCircle );
+			
+			// Because this object collaborates with multiple objects, we might have a partial 
+			// failure. If so, we have to rollback the relationships that worked.
+			try {
+
+				this.addSocialCircle( aSocialCircle );
+
+			} catch ( error ) {
+
+				// TODO: Rollback the Person-Friend (ie, Actor-Role) relationship.
+				// this.person.doRemoveFriend( this );
+
+			}
 
 		}
 
@@ -27,7 +39,7 @@ define(
 				this.testAddPerson( newPerson );
 				this.doAddPerson( newPerson );
 
-				// Establish the bi-directional relationship.
+				// TODO: Establish the bi-directional relationship.
 				// newPerson.doAddFriend( this );
 
 			},
@@ -74,6 +86,11 @@ define(
 
 				}
 
+				// NOTE: We do not have to check with the Person for validation of the role.
+				// The Social-Cirlce test (below) will handle this implicitly. Since you cannot
+				// be part of a social circle twice at the same time, we know that the Person
+				// doesn't have the "Friend" role in the given Social Circle context.
+
 				// If the social circle has already been set, we can test against it.
 				// --
 				// NOTE: We know that this method will *really* only ever be called before the
@@ -110,7 +127,7 @@ define(
 				// of the calls. We can get around this by adding this simple, bi-directional check.
 				if ( this.person ) {
 
-					// ...
+					newSocialCircle.testAddPersonConflict( this.person );
 
 				}
 

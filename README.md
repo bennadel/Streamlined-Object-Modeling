@@ -81,6 +81,69 @@ As each of these objects is assembled into a object modeling pattern, they are r
 * Line Item
 * Follow-up Transaction
 
+## Object Collaboration Patterns
+
+Within your application, your objects will often work together in order to model and fulfill 
+business requirements. These relationships - these collaborations - follow 12 general patterns.
+Within each pattern, each object is known as a "pattern player" and has specific responsibilities
+when it comes to defining business logic and enforcing business constraints. 
+
+### Actor -- Role
+
+A Role is the representation of an Actor within a given context. An Actor may know zero or more
+roles (though the set of Roles is typically unique). A Role may only know one Actor (and the Actor 
+can never be changed).
+
+### OuterPlace -- Place
+
+A Place is a location where things happen. An OuterPlace may know one or more Places - it cannot be
+empty. A Place may know at most one OuterPlace. This relationship can be hierarchical.
+
+### Item -- SpecificItem
+
+A SpecificItem is a specific representation of a generic Item. An Item may know zero or more 
+SpecificItems. A SpecificItem must know exactly one Item (and cannot exist without it).
+
+### Assembly -- Part
+
+An Assembly is an aggregation of Parts. An Assembly must know at least one Part - it cannot be 
+empty. A Part may know only one Assembly, but it can exist outside of an Assembly.
+
+### Container -- Content
+
+A Container is an collection of Content. A Container may know zero or more Contents - it can be 
+empty. A Content may know at most one Container, but it can exist outside the Container and it can
+be moved into another Container. This relationship can be hierarchical. 
+
+### Group -- Member
+
+A Group is a collection of Members. A Group knows zero or more members - it can be empty. A Member
+knows zero or more Groups. This relationship can be hierarchical.
+
+### Role -- Transaction
+
+_To be continued..._
+
+### Place -- Transaction
+
+_To be continued..._
+
+### SpecificItem -- Transaction
+
+_To be continued..._
+
+### CompositeTransaction -- LineItem
+
+_To be continued..._
+
+### SpecificItem -- LineItem
+
+_To be continued..._
+
+### Transaction -- FollowupTransaction
+
+_To be continued..._
+
 ## Business Rules - Implementation Strategies
 
 I'm a fan of rules and "best practices;" and, [Streamlined Object Modeling][book] has some really 

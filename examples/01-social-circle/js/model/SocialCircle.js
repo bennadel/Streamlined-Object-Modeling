@@ -125,16 +125,31 @@ define(
 
 
 			// I test to see if forming a uni-directional attraction between the given person and
-			// the given target would create a love-triangle.
+			// the given target would create either a mutual attraction or a love-triangle, neither
+			// of which is healthy for the group.
 			testAddPersonAttractionConflict: function( aPerson, newAttraction ) {
 
-				// This is somewhat complicated because constraint works in two ways - each of the
-				// people involved could be the man-in-the-middle, so to speak. Meaning, if we are
-				// about to create an attraction between A + B, we run into a problem if:
+				// If the target of the attraction is not in the group, then there's no problem.
+				if ( ! this.hasPerson( newAttraction ) ) {
+
+					return;
+
+				}
+
+				// If the two group members are attracted to each other, then we can't allow it.
+				if ( newAttraction.isAttractedTo( aPerson ) ) {
+
+					throw( new Error( "Attraction would create a mutual attraction." ) );
+
+				}
+
+				// Check for love triangle. This is somewhat complicated because this constraint
+				// works in two ways - each of the people involved could be the man-in-the-middle,
+				// so to speak. Meaning, if we are about to create an attraction between A + B, we 
+				// run into a problem if:
 				// 
 				// - B already has an attraction to someone else (X) in the social circle, creating A-B-X.
 				// - Someone else (X) in the cicrle already has an attraction to A, creating X-A-B. 
-
 				for ( var i = 0, length = this.persons.length ; i < length ; i++ ) {
 
 					var trianglePerson = this.persons[ i ];
@@ -214,7 +229,7 @@ define(
 
 				}
 
-				// Love triangle test.
+				// Attraction test.
 
 				// For each person in the group, check to see if the NEW person is attracted to them.
 				for ( var i = 0 ; i < this.persons.length ; i++ ) {
@@ -223,8 +238,16 @@ define(
 
 					if ( newPerson.isAttractedTo( targetPerson ) ) {
 
-						// The NEW person is attracted to the given person. For eacn person in the 
-						// group, we need to see if a further attraction is owned by the target.
+						// If the target person is also attracted to the incoming person, then we're
+						// going to have too much tention in the air.
+						if ( targetPerson.isAttractedTo( newPerson ) ) {
+
+							throw( new Error( "Person would create a mutual attraction." ) );
+
+						}
+
+						// The target person isn't attracted to the given person; however, we have 
+						// to make sure that no unhealthy love triangle will be created.
 						for ( var t = 0 ; t < this.persons.length ; t++ ) {
 
 							var trianglePerson = this.persons[ t ];

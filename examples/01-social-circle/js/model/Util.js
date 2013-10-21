@@ -1,6 +1,6 @@
 define(
-	[ "lodash" ],
-	function( _ ) {
+	[ "lodash", "printStackTrace" ],
+	function( _, printStackTrace ) {
 
 		// The util class extends the lodash library and adds new utility methods.
 		var util = Object.create( _ );
@@ -20,6 +20,62 @@ define(
 			}
 
 			return( false );
+
+		};
+
+
+		// I am a short-hand for assertTrue().
+		util.assert = function( truthy ) {
+
+			util.assertTrue( truthy );
+
+		};
+
+
+		// I assert that the given value is falsey.
+		util.assertFalse = function( falsey ) {
+
+			if ( falsey == true ) {
+
+				throw( new Error( "Expected falsey." ) );
+
+			}
+
+		};
+
+
+		// I assert that the given value is truthy.
+		util.assertTrue = function( truthy ) {
+
+			if ( truthy == false ) {
+
+				throw( new Error( "Expected truthy." ) );
+
+			}
+
+		};
+
+
+		util.printStackTrace = function( error ) {
+
+			console.log( printStackTrace( error ).join( "\n" ) );
+
+		};
+
+
+		util.test = function( callback ) {
+
+			try {
+
+				callback();
+
+			} catch ( error ) {
+
+				util.printStackTrace({ e: error });
+
+				console.log( stacktrace );
+				
+			}
 
 		};
 

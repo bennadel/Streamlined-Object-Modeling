@@ -55,17 +55,17 @@ define(
 
 
 			// I add the given attraction without any validation.
-			doAddAttraction: function( aPerson ) {
+			doAddAttraction: function( newPerson ) {
 
-				this.attractions.push( aPerson );
+				this.attractions.push( newPerson );
 
 			},
 
 
 			// I add the given social circle without any validation.
-			doAddSocialCircle: function( aSocialCircle ) {
+			doAddSocialCircle: function( newSocialCircle ) {
 
-				this.socialCircles.push( aSocialCircle );
+				this.socialCircles.push( newSocialCircle );
 
 			},
 
@@ -308,7 +308,7 @@ define(
 
 				}
 
-				newSocialCircle.testAddPersonConflict( this );
+				newSocialCircle.testAddPerson( this );
 
 			},
 
@@ -325,9 +325,15 @@ define(
 			// I test to make sure the given date of birth can be set.
 			testSetDateOfBirth: function( newDateOfBirth ) {
 
+				if ( this.dateOfBirth ) {
+
+					throw( new Error( "Date of Birth cannot be changed - this is not Witness Protection." ) );
+
+				}
+
 				if ( newDateOfBirth.isAgeGT( 120 ) ) {
 
-					throw( new Error( "Age is not valid." ) );
+					throw( new Error( "Date of Birth is not valid." ) );
 
 				}
 

@@ -1,5 +1,5 @@
 define(
-	[ "util" ],
+	[ "Util" ],
 	function( util ) {
 
 		// I represent a "collection" of people.
@@ -180,7 +180,7 @@ define(
 
 
 			// I test to see if the given person can be added as a new Person in the social circle.
-			testAddPersonConflict: function( newPerson ) {
+			testAddPerson: function( newPerson ) {
 
 				if ( newPerson.getAge() < 18 ) {
 

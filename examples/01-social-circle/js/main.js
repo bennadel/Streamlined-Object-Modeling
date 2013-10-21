@@ -5,11 +5,15 @@
 require.config({
 	baseUrl: "js/model/",
 	paths: {
-		lodash: "../../../vendor/lodash/lodash-2.2.1"
+		lodash: "../../../vendor/lodash/lodash-2.2.1",
+		printStackTrace: "../../../vendor/stacktrace/stacktrace"
 	},
 	shim: {
 		lodash: {
-			explorts: "_"
+			exports: "_"
+		},
+		printStackTrace: {
+			exports: "printStackTrace"
 		}
 	}
 });
@@ -17,12 +21,36 @@ require.config({
 
 // Build, join, test, and have fun with the model.
 require(
-	[ "DateOfBirth", "Person", "SocialCircle" ],
-	function( DateOfBirth, Person, SocialCircle ) {
+	[ "Util", "DateOfBirth", "Person", "SocialCircle" ],
+	function( util, DateOfBirth, Person, SocialCircle ) {
 
 
-		console.log( "Modules have been defined." );
-		console.log( "Main." );
+		util.test(
+			function testDateOfBirth() {
+
+				var now = new Date();
+				var dob = new DateOfBirth( now );
+
+				util.assertTrue( dob.getAge() === 0 );
+				util.assertTrue( dob.isAgeLTE( 0 ) );
+				util.assertTrue( dob.isAgeLT( 1 ) );
+				util.assertTrue( dob.isAgeEQ( 0 ) );
+				util.assertFalse( dob.isAgeGT( 0 ) );
+				util.assertTrue( dob.isAgeGTE( 0 ) );
+
+
+				var fiveYearsInMS = ( 5 * 365 * 24 * 60 * 60 * 1000 );
+				var dob = new DateOfBirth( now.getTime() - fiveYearsInMS );
+
+				util.assertTrue( dob.isAgeLTE() === 5 );
+
+			}
+		);
+
+
+
+
+
 
 
 		// Create some people to play with.
@@ -77,10 +105,11 @@ require(
 		var vincent = people.men[ 0 ];
 
 		tricia.addAttraction( vincent );
-		vincent.addAttraction( sarah );
+		//vincent.addAttraction( sarah );
 
 
 		console.log( socialCircle );
+		console.log( tricia.getAttractions() );
 
 
 	}

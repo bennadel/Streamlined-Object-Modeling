@@ -37,9 +37,29 @@ define(
 
 			if ( falsey == true ) {
 
+				console.info( "Given value:", falsey );
+
 				throw( new Error( "Expected falsey." ) );
 
 			}
+
+		};
+
+
+		// I throw a test error - used to make sure a part of the code is not run.
+		util.assertFail = function( callback ) {
+
+			try {
+
+				callback( util.assertTrue, util.assertFalse, util.assertFail );
+
+			} catch ( error ) {
+
+				return;
+
+			}
+
+			throw( new Error( "Expected failure." ) );
 
 		};
 
@@ -49,6 +69,8 @@ define(
 
 			if ( truthy == false ) {
 
+				console.info( "Given value:", truthy );
+
 				throw( new Error( "Expected truthy." ) );
 
 			}
@@ -56,24 +78,27 @@ define(
 		};
 
 
-		util.printStackTrace = function( error ) {
+		// I get the stacktrace from the given error.
+		util.getStacktrace = function( error ) {
 
-			console.log( printStackTrace( error ).join( "\n" ) );
+			return( printStackTrace( error ) );
 
 		};
 
 
+		// I run the given unit test.
 		util.test = function( callback ) {
 
 			try {
 
-				callback();
+				callback( util.assertTrue, util.assertFalse, util.assertFail );
 
 			} catch ( error ) {
 
-				util.printStackTrace({ e: error });
-
-				console.log( stacktrace );
+				console.error( error );
+				
+				// var stacktrace = util.getStacktrace({ e: error });
+				// console.error( stacktrace.join( "\n" ) );
 				
 			}
 

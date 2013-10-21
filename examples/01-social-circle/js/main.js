@@ -25,91 +25,317 @@ require(
 	function( util, DateOfBirth, Person, SocialCircle ) {
 
 
-		util.test(
-			function testDateOfBirth() {
+		console.info( "Running unit tests." );
+
+
+		util.test( 
+			function testDateOfBirth( assertTrue, assertFalse, assertFail ) {
 
 				var now = new Date();
 				var dob = new DateOfBirth( now );
 
-				util.assertTrue( dob.getAge() === 0 );
-				util.assertTrue( dob.isAgeLTE( 0 ) );
-				util.assertTrue( dob.isAgeLT( 1 ) );
-				util.assertTrue( dob.isAgeEQ( 0 ) );
-				util.assertFalse( dob.isAgeGT( 0 ) );
-				util.assertTrue( dob.isAgeGTE( 0 ) );
+				assertTrue( dob.getAge() === 0 );
+				assertTrue( dob.isAgeLTE( 0 ) );
+				assertTrue( dob.isAgeLT( 1 ) );
+				assertTrue( dob.isAgeEQ( 0 ) );
+				assertFalse( dob.isAgeGT( 0 ) );
+				assertTrue( dob.isAgeGTE( 0 ) );
 
 
 				var fiveYearsInMS = ( 5 * 365 * 24 * 60 * 60 * 1000 );
 				var dob = new DateOfBirth( now.getTime() - fiveYearsInMS );
 
-				util.assertTrue( dob.isAgeLTE() === 5 );
+				assertTrue( dob.getAge() === 5 );
+				assertTrue( dob.isAgeLT( 6 ) );
+				assertTrue( dob.isAgeLTE( 5 ) );
+				assertTrue( dob.isAgeEQ( 5 ) );
+				assertTrue( dob.isAgeGTE( 5 ) );
+				assertTrue( dob.isAgeGT( 4 ) );
+
+
+				assertFail(
+					function testInvalidDateOfBirth() {
+
+						var dob = new DateOfBirth( "blam" );
+
+					}
+				);
+
+
+				var dateA = new DateOfBirth( "1980/06/12" );
+				var dateB = new DateOfBirth( "1980/06/12" );
+				var dateC = new DateOfBirth( "1990/01/01" );
+
+				assertTrue( dateA.equals( dateB ) );
+				assertTrue( dateB.equals( dateA ) );
+				assertFalse( dateA.equals( dateC ) );
+				assertFalse( dateC.equals( dateB ) );
+				
+			}
+		);
+
+
+		util.test(
+			function testPerson( assertTrue, assertFalse, assertFail ) {
+
+				var jenna = new Person( "Jenna Smith", "F", new DateOfBirth( "1974/05/09" ) );
+
+				assertTrue( jenna.getName() === "Jenna Smith" );
+				assertTrue( jenna.getGender() === "F" );
+				assertTrue( jenna.isFemale() );
+				assertFalse( jenna.isMale() );
+
+
+				var johnny = new Person( "Johnny Smith", "M", new DateOfBirth( "1980/11/27" ) );
+
+				assertTrue( johnny.getName() === "Johnny Smith" );
+				assertTrue( johnny.getGender() === "M" );
+				assertTrue( johnny.isMale() );
+				assertFalse( johnny.isFemale() );
+
+
+				assertFail(
+					function testInvalidAssignment() {
+
+						jenna.setGender( "M" );
+
+					}
+				);
+
+				assertFail(
+					function testInvalidAssignment() {
+
+						jenna.setDateOfBirth( new DateOfBirth( "1980/01/01" ) );
+
+					}
+				);
+
+
+				jenna.setName( "J-Dog" );
+
+				assertTrue( jenna.getName() === "J-Dog" );
+
+
+				var personA = new Person( "Tricia Smith", "F", new DateOfBirth( "1980/01/01" ) );
+				var personB = new Person( "Tricia Smith", "F", new DateOfBirth( "1980/01/01" ) );
+				var personC = new Person( "Libby Smith", "F", new DateOfBirth( "1980/01/01" ) );
+
+				assertTrue( personA.equals( personB ) );
+				assertTrue( personB.equals( personA ) );
+				assertFalse( personA.equals( personC ) );
+				assertFalse( personC.equals( personB ) );
 
 			}
 		);
 
 
+		util.test(
+			function testAttraction( assertTrue, assertFalse, assertFail ) {
+
+				var sarah = new Person( "Sarah Smith", "F", new DateOfBirth( "1970/09/03" ) );
+				var tricia = new Person( "Tricia Smith", "F", new DateOfBirth( "1981/11/22" ) );
+				var arnold = new Person( "Arnold Smith", "M", new DateOfBirth( "1972/12/28" ) );
+				var vincent = new Person( "Vincent Smith", "M", new DateOfBirth( "1983/08/17" ) );
+
+				sarah.addAttraction( tricia );
+				sarah.addAttraction( arnold );
+
+				assertTrue( sarah.isAttractedTo( tricia ) );
+				assertTrue( sarah.isAttractedTo( arnold ) );
+				assertFalse( sarah.isAttractedTo( vincent ) );
+				assertFalse( tricia.isAttractedTo( sarah ) );
+				assertFalse( vincent.isAttractedTo( sarah ) );
 
 
+				sarah.removeAttraction( tricia );
+
+				assertFalse( sarah.isAttractedTo( tricia ) );
+				assertTrue( sarah.isAttractedTo( arnold ) );
+				assertFalse( sarah.isAttractedTo( vincent ) );
 
 
+				sarah.removeAttraction( arnold );
 
-		// Create some people to play with.
-		var people = {
-			women: [
-				new Person( "Tricia Smith", "F", new DateOfBirth( "1974/04/12" ) ),
-				new Person( "Joanna Smith", "F", new DateOfBirth( "1978/01/30" ) ),
-				new Person( "Sarah Smith", "F", new DateOfBirth( "1968/11/04" ) ),
-				new Person( "Kim Smith", "F", new DateOfBirth( "1983/12/25" ) ),
-				new Person( "Heather Smith", "F", new DateOfBirth( "1980/02/11" ) ),
-				new Person( "Anna Smith", "F", new DateOfBirth( "1977/07/17" ) ),
-				new Person( "Kelly Smith", "F", new DateOfBirth( "1981/03/26" ) )
-			],
-			men: [
-				new Person( "Vincent Smith", "M", new DateOfBirth( "1975/05/13" ) ),
-				new Person( "Kevin Smith", "M", new DateOfBirth( "1977/02/29" ) ),
-				new Person( "Arnold Smith", "M", new DateOfBirth( "1969/10/05" ) ),
-				new Person( "Sly Smith", "M", new DateOfBirth( "1982/11/24" ) ),
-				new Person( "Jason Smith", "M", new DateOfBirth( "1979/03/12" ) ),
-				new Person( "Miles Smith", "M", new DateOfBirth( "1978/06/16" ) ),
-				new Person( "Johnny Smith", "M", new DateOfBirth( "1980/04/25" ) )
-			]
-		};
+				assertFalse( sarah.isAttractedTo( tricia ) );
+				assertFalse( sarah.isAttractedTo( arnold ) );
+				assertFalse( sarah.isAttractedTo( vincent ) );
 
 
-		var socialCircle = new SocialCircle();
+				assertFail(
+					function testBadAttraction() {
 
-		socialCircle.addPerson( people.women[ 0 ] );
-		socialCircle.addPerson( people.men[ 0 ] );
-		
-		socialCircle.addPerson( people.women[ 1 ] );
-		socialCircle.addPerson( people.men[ 1 ] );
-		
-		socialCircle.addPerson( people.women[ 2 ] );
-		socialCircle.addPerson( people.men[ 2 ] );
-		
-		socialCircle.addPerson( people.women[ 3 ] );
-		socialCircle.addPerson( people.men[ 3 ] );
-		
-		socialCircle.addPerson( people.women[ 4 ] );
-		socialCircle.addPerson( people.men[ 4 ] );
-		
-		socialCircle.addPerson( people.women[ 5 ] );
-		socialCircle.addPerson( people.men[ 5 ] );
-		
-		socialCircle.addPerson( people.women[ 6 ] );
-		socialCircle.addPerson( people.men[ 6 ] );
+						sarah.addAttraction( sarah );
+
+					}
+				);
 
 
-		var tricia = people.women[ 0 ];
-		var sarah = people.women[ 2 ];
-		var vincent = people.men[ 0 ];
+				assertFail(
+					function testDuplicateAttraction() {
 
-		tricia.addAttraction( vincent );
-		//vincent.addAttraction( sarah );
+						sarah.addAttraction( arnold );
+						sarah.addAttraction( arnold );
+
+					}
+				);
+
+			}
+		);
 
 
-		console.log( socialCircle );
-		console.log( tricia.getAttractions() );
+		util.test(
+			function testSocialCircle( assertTrue, assertFalse, assertFail ) {
+
+				var sarah = new Person( "Sarah Smith", "F", new DateOfBirth( "1980/02/11" ) );
+				var arnold = new Person( "Arnold Smith", "M", new DateOfBirth( "1980/02/11" ) );
+				var kit = new Person( "Kit Smith", "F", new DateOfBirth( "1982/10/14" ) );
+				var socialCircle = new SocialCircle();
+
+				socialCircle.addPerson( sarah );
+				socialCircle.addPerson( arnold );
+
+				assertTrue( socialCircle.hasPerson( sarah ) );
+				assertTrue( socialCircle.hasPerson( arnold ) );
+				assertTrue( sarah.isInSocialCircle( socialCircle ) );
+				assertTrue( arnold.isInSocialCircle( socialCircle ) );
+				assertFalse( socialCircle.hasPerson( kit ) );
+				assertFalse( kit.isInSocialCircle( socialCircle ) );
+
+
+				socialCircle.removePerson( sarah );
+
+				assertFalse( sarah.isInSocialCircle( socialCircle ) );
+				assertFalse( socialCircle.hasPerson( sarah ) );
+				assertTrue( arnold.isInSocialCircle( socialCircle ) );
+				assertTrue( socialCircle.hasPerson( arnold ) );
+
+			}
+		);
+
+
+		util.test(
+			function testSocialCircleGenderRatio( assertTrue, assertFalse, assertFail ) {
+
+				var sarah = new Person( "Sarah Smith", "F", new DateOfBirth( "1980/02/11" ) );
+				var tricia = new Person( "Tricia Smith", "F", new DateOfBirth( "1981/03/10" ) );
+				var joanna = new Person( "Joanna Smith", "F", new DateOfBirth( "1978/08/21" ) );
+				var libby = new Person( "Libby Smith", "F", new DateOfBirth( "1983/12/28" ) );
+				var kit = new Person( "Kit Smith", "F", new DateOfBirth( "1982/10/14" ) );
+				var arnold = new Person( "Arnold Smith", "M", new DateOfBirth( "1980/02/11" ) );
+				var vincent = new Person( "Vincent Smith", "M", new DateOfBirth( "1981/03/10" ) );
+				var dominic = new Person( "Dominic Smith", "M", new DateOfBirth( "1978/08/21" ) );
+				var johnny = new Person( "Johnny Smith", "M", new DateOfBirth( "1983/12/28" ) );
+				var bodhi = new Person( "Bodhi Smith", "M", new DateOfBirth( "1982/10/14" ) );
+				
+
+				var socialCircle = new SocialCircle();
+
+				socialCircle.addPerson( sarah );
+				socialCircle.addPerson( tricia );
+				socialCircle.addPerson( joanna );
+				socialCircle.addPerson( libby );
+				socialCircle.addPerson( kit );
+
+				assertFail(
+					function() {
+
+						socialCircle.addPerson( arnold );
+
+					}
+				);
+				
+
+				var socialCircle = new SocialCircle();
+
+				socialCircle.addPerson( arnold );
+				socialCircle.addPerson( vincent );
+				socialCircle.addPerson( dominic );
+				socialCircle.addPerson( johnny );
+				socialCircle.addPerson( bodhi );
+
+				assertFail(
+					function() {
+
+						socialCircle.addPerson( sarah );
+
+					}
+				);
+
+			}
+		);
+
+
+		util.test(
+			function testSocialCircleLoveTriangle( assertTrue, assertFalse, assertFail ) {
+
+				var sarah = new Person( "Sarah Smith", "F", new DateOfBirth( "1980/02/11" ) );
+				var tricia = new Person( "Tricia Smith", "F", new DateOfBirth( "1981/03/10" ) );
+				var arnold = new Person( "Arnold Smith", "M", new DateOfBirth( "1980/02/11" ) );
+				var vincent = new Person( "Vincent Smith", "M", new DateOfBirth( "1981/03/10" ) );
+				var socialCircle = new SocialCircle();
+
+
+				sarah.addAttraction( arnold );
+				sarah.addAttraction( vincent );
+				arnold.addAttraction( tricia );
+
+				socialCircle.addPerson( sarah );
+				socialCircle.addPerson( vincent );
+				socialCircle.addPerson( arnold );
+
+				assertFail(
+					function() {
+
+						socialCircle.addPerson( tricia );
+
+					}
+				);
+
+
+				assertFalse( tricia.isInSocialCircle( socialCircle ) );
+				assertFalse( socialCircle.hasPerson( tricia ) );
+
+
+				assertFail(
+					function() {
+
+						arnold.addAttraction( sarah );
+
+					}
+				);
+
+				assertTrue( sarah.isAttractedTo( arnold ) );
+				assertFalse( arnold.isAttractedTo( sarah ) );
+
+			}
+		);
+
+
+		util.test(
+			function testSocialCircleMutualAttraction( assertTrue, assertFalse, assertFail ) {
+
+				var sarah = new Person( "Sarah Smith", "F", new DateOfBirth( "1980/02/11" ) );
+				var arnold = new Person( "Arnold Smith", "M", new DateOfBirth( "1980/02/11" ) );
+				var socialCircle = new SocialCircle();
+
+				sarah.addAttraction( arnold );
+				arnold.addAttraction( sarah );
+
+				socialCircle.addPerson( sarah );
+
+				assertFail(
+					function() {
+
+						socialCircle.addPerson( arnold );
+
+					}
+				);
+
+			}
+		);
+
+
+		console.info( "Unit tests completed." );
 
 
 	}

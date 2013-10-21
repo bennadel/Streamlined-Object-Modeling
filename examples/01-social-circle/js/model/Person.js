@@ -217,6 +217,23 @@ define(
 			},
 
 
+			// I add the given social circle.
+			removeSocialCircle: function( aSocialCircle ) {
+
+				if ( ! aSocialCircle ) {
+
+					throw( new Error( "Social Circle is null." ) );
+
+				}
+
+				this.testRemoveSocialCircle( aSocialCircle );
+				this.doRemoveSocialCircle( aSocialCircle );
+				aSocialCircle.doRemovePerson( this );
+
+			},
+
+
+
 			// I set the date of birth (with validation constraints).
 			setDateOfBirth: function( newDateOfBirth ) {
 
@@ -318,6 +335,20 @@ define(
 
 				// There's no point in testing to make sure the person is actually an attraction -
 				// trying to remove an attaction that doesn't exist will not throw an error.
+
+			},
+
+
+			// I test to make sure the social circle relationship can be dissolved.
+			testRemoveSocialCircle: function( aSocialCircle ) {
+
+				if ( ! this.isInSocialCircle( aSocialCircle ) ) {
+
+					return;
+
+				}
+
+				aSocialCircle.testRemovePerson( this );
 
 			},
 

@@ -24,18 +24,18 @@ define(
 		SocialCircle.prototype = {
 
 			// I add the given person to the social circle.
-			addPerson: function( aPerson ) {
+			addPerson: function( newPerson ) {
 
-				if ( ! aPerson ) {
+				if ( ! newPerson ) {
 
 					throw( new Error( "Person is null." ) );
 
 				}
 
 				// Defer the coordination of the "add" to the person. When streamlining the bi-
-				// directional, the whole defers to part (or in this case, the Group defers to 
-				// the Member to coordinate).
-				aPerson.addSocialCircle( this );
+				// directional relationship, the whole defers to part (or in this case, the Group 
+				// defers to the Member to coordinate).
+				newPerson.addSocialCircle( this );
 
 			},
 
@@ -44,6 +44,14 @@ define(
 			doAddPerson: function( newPerson ) {
 
 				this.persons.push( newPerson );
+
+			},
+
+
+			// I remove the given person (without any validation).
+			doRemovePerson: function( aPerson ) {
+
+				this.persons = util.withoutEquals( this.persons, aPerson );
 
 			},
 
@@ -120,6 +128,23 @@ define(
 			isAtCapacity: function() {
 
 				return( this.persons.length === this.maxPersonsCount );
+
+			},
+
+
+			// I remove the given person from the social circle.
+			removePerson: function( aPerson ) {
+
+				if ( ! aPerson ) {
+
+					throw( new Error( "Person is null." ) );
+
+				}
+
+				// Defer the coordination of the "remove" to the person. When streamlining the bi-
+				// directional relationship, the whole defers to part (or in this case, the Group 
+				// defers to the Member to coordinate).
+				aPerson.removeSocialCircle( this );
 
 			},
 
@@ -229,9 +254,13 @@ define(
 
 				}
 
-				// Attraction test.
-
-				// For each person in the group, check to see if the NEW person is attracted to them.
+				// Check for love triangle. This is somewhat complicated because this constraint
+				// works in two ways - each of the people involved could be the man-in-the-middle,
+				// so to speak. Meaning, if we are about to add person A to the social circle, we 
+				// run into a problem if:
+				// 
+				// - A is attracted to someone (X) who is already attracted to someone else (Y).
+				// - Someone else (X) is attracted to someone else (Y), who is attracted to A.
 				for ( var i = 0 ; i < this.persons.length ; i++ ) {
 
 					var targetPerson = this.persons[ i ];
@@ -259,6 +288,57 @@ define(
 							}
 
 						}
+
+					} else if ( targetPerson.isAttractedTo( newPerson ) ) {
+
+						// The target person is attracted to the incoming person; make sure that 
+						// no one else in the group is attracted to the target person.
+						for ( var t = 0 ; t < this.persons.length ; t++ ) {
+
+							var trianglePerson = this.persons[ t ];
+
+							if ( trianglePerson.isAttractedTo( targetPerson ) ) {
+
+								throw( new Error( "Person would create a love triangle." ) );
+
+							}
+
+						}
+
+					}
+
+				}
+
+			},
+
+
+			// I test to make sure the relationship with the person can be dissovled.
+			testRemovePerson: function( aPerson ) {
+
+				// When a person is removed, the only problem we have to worry about is that the 
+				// social circle gender ratio will fall below a dangerous level.
+				var maleCount = this.getMaleCount();
+				var femaleCount = this.getFemaleCount();
+
+				if ( aPerson.isMale() ) {
+
+					maleCount--;
+
+				} else {
+
+					femaleCount--;
+
+				}
+
+				// The ratio check only matters if we have BOTH men and women. A single-gender group
+				// has no problem.
+				if ( maleCount && femaleCount ) {
+
+					var smallestGenderRatio = Math.min( ( maleCount / femaleCount ), ( femaleCount / maleCount ) );
+
+					if ( smallestGenderRatio < this.minimumGenderRatio ) {
+
+						throw( new Error( "Removeing Person would violate minimum gender ratio." ) );
 
 					}
 

@@ -3,42 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 
-	<title>
-		Streamlined Object Modeling
-	</title>
-
-	<!-- 
-		Before we load the RequireJS module, let's quickly define the urlArgs for cache-
-		busting. We can define this in the main.js file directly; however, in that case, 
-		the cache-busting is only applied to modules loaded AFTER main. In order to cache-
-		bust main itself, we have to define the urlArgs before main.js is even loadedl.
-		--
-		NOTE: We're doing this because GitHub caching works "too" well :)
-	-->
-	<script type="text/javascript">
-		
-		var require = {
-			urlArgs: ( "v=" + Date.now() )
-		};
-
-	</script>
-	<script type="text/javascript" src="../vendor/require/require-2.1.8.js" data-main="js/main"></script>
+	<!-- Redirect the user to the "tests" directory since there's nothing visual in this code-base. -->
+	<meta http-equiv="refresh" content="0;./tests/index.htm" />
 </head>
-<body>
-	
-	<h1>
-		Streamlined Object Modeling
-	</h1>
-
-	<p>
-		<strong>Attention</strong>: All activity will be display in the Console.
-	</p>
-
-	<p>
-		<em>
-			<a href="https://github.com/bennadel/Streamlined-Object-Modeling" target="_blank">See project page</a>.
-		</em>
-	</p>
-
-</body>
 </html>

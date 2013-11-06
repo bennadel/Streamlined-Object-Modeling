@@ -1,0 +1,335 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="author" content="Ben Nadel, ben@bennadel.com" />
+
+	<title>
+		Tiny Test JS : Test-Driven JavaScript Development
+	</title>
+
+	<!-- Load the stylesheets. -->
+	<link rel="stylesheet" type="text/css" href="tinytest/css/test-suite.css"></link>
+
+	<!--
+		Load the scripts. Note that we are BLOCKING the loading of the Application.js file
+		since we need it in order to properly configure the bootstrapping of the application.
+	-->
+	<script type="text/javascript" src="tinytest/vendor/require/require-2.1.9.min.js"></script>
+	<script type="text/javascript" src="Application.js"></script>
+	<script type="text/javascript">
+
+		// NOTE: For this application, I am kind of hijacking the "require" namnespace. Since
+		// it is already required that "require" be global (no pun intended), I'm gonna go
+		// ahead and just tack-on any other global that I will need (ex. specs, ex. tinytest).
+		// This way, we keep the pollution of the global namespace to a minimum.
+
+		// -------------------------------------------------------------------------------- //
+		// -------------------------------------------------------------------------------- //
+
+		// Set up the configuration for the test suite application.
+		// --
+		// NOTE: urlArgs are intended to bust the cache while in development and on GitHub.
+		// GitHub has some strong caching rules and JS files get cached for a while.
+		require.config({
+			paths: {
+				angular: "tinytest/vendor/angular/angular-1.0.8.min",
+				jquery: "tinytest/vendor/jquery/jquery-2.0.3.min",
+				lodash: "tinytest/vendor/lodash/lodash-2.2.1.min",
+				specs: "specs",
+				printstacktrace: "tinytest/vendor/stacktrace/stacktrace",
+				tinytest: "tinytest"
+			},
+			shim: {
+				angular: {
+					deps: [ "jquery" ],
+					exports: "angular"
+				},
+				printstacktrace: {
+					exports: "printStackTrace"
+				}
+			},
+			urlArgs: ( "ttCacheBust=" + ( new Date() ).getTime() )
+		});
+
+		// Load the core libraries, including the AngularJS module.
+		require(
+			[ 
+				"lodash",
+				"jquery",
+				"angular",
+				"printstacktrace",
+				"specs/TestCase"
+			],
+			function( lodash, jquery, angular, printStackTrace, proxyTestCase ) {
+
+				// Define the TinyTest module so we can start defining our controllers.
+				var tinytest = require.tinytest = angular.module( "TinyTest", [] );
+
+				// Store the specs as an AngularJS value so we can decouple them from the require
+				// namespace beyond this point.
+				tinytest.value( "specs", require.specs );
+
+				// Release the globals references for our utility library and make them available
+				// to the AngularJS dependency injection container.
+				tinytest.value( "_", lodash.noConflict() );
+				tinytest.value( "$", jquery.noConflict() );
+
+				// Add the global stacktrace utility to the module system.
+				tinytest.value( "printStackTrace", printStackTrace );
+
+				// Store the proxy test case as a value. This is the method-collection that sits in 
+				// "specs/" directory and allows the user to define core/comment spec-methods for 
+				// all of their test cases.
+				tinytest.value( "proxyTestCaseMethods", proxyTestCase );
+
+				// Now that we have defined our TinyTest container, and translated some RequireJS 
+				// modules into AngularJS modules, let's load all of the AngularJS dependencies and
+				// then bootstrap this baby beast.
+				require(
+					[
+						"tinytest/beans/test-case",
+						"tinytest/beans/test-error",
+						"tinytest/beans/test-results",
+						"tinytest/beans/test-suite",
+						"tinytest/controllers/app-controller",
+						"tinytest/directives/auto-run",
+						"tinytest/directives/global-error-handler",
+						"tinytest/directives/processing-overlay",
+						"tinytest/services/require",
+						"tinytest/services/stacktrace"
+					],
+					function requireSuccessCallback() {
+
+						angular.bootstrap( document, [ "TinyTest" ] );
+
+					}
+				);
+
+			}
+		); 
+		// END: require().
+
+	</script>
+</head>
+<body ng-controller="AppController" tt-global-error-handler>
+
+
+	<!--
+		BEGIN: Initial Loading. This will be seen by the user before the AngularJS application 
+		has been bootstrapped (at which time the elements with "ng-cloak" will be revealed.)
+	-->
+	<div ng-hide="true" class="loading">
+
+		Loading Test Harness		
+
+	</div>
+	<!-- END: Initial Loading. -->
+
+
+	<!-- BEGIN: Form. -->
+	<form ng-submit="runTests()" class="ng-cloak">
+
+
+		<!-- BEGIN: Site Info. -->
+		<div class="siteInfo">
+
+			<a href="./index.htm" class="name">
+				TinyTest JS
+			</a>
+
+			<span class="tddMentality">
+				Red - Green - Refactor
+			</span>
+
+			<span class="author">
+				by <a href="http://www.bennadel.com" target="bennadelcom">Ben Nadel</a>
+			</span>
+
+		</div>
+		<!-- END: Site Info. -->
+
+
+		<!-- BEGIN: Status Output. -->
+		<div ng-switch="testStatus">
+
+			<!-- BEGIN: Test Status. -->
+			<div ng-switch-when="start" class="testStatus start">
+
+				<button type="submit" class="callToAction">
+
+					<div class="subtitle">
+						<span>Test Driven Development</span>
+					</div>
+
+					<div class="status">
+						Start
+					</div>
+
+					<div class="button">
+						Run Selected Tests
+					</div>
+
+				</button>
+
+			</div>
+			<!-- END: Test Status. -->
+
+
+			<!-- BEGIN: Test Status. -->
+			<div ng-switch-when="pass" class="testStatus pass">
+
+				<button type="submit" class="callToAction">
+
+					<div class="subtitle">
+						<span>You Ran {{ testResults.getTestCount() }} Tests In {{ testResults.getDuration() }} ms</span>
+					</div>
+
+					<div class="status">
+						Passed
+					</div>
+
+					<div class="button">
+						Run Tests Again
+					</div>
+
+				</button>
+
+			</div>
+			<!-- END: Test Status. -->
+
+
+			<!-- BEGIN: Test Status. -->
+			<div ng-switch-when="fail" class="testStatus fail">
+
+				<button type="submit" class="callToAction">
+
+					<div class="subtitle">
+						<span>You Ran {{ testResults.getTestCount() }} Tests In {{ testResults.getDuration() }} ms</span>
+					</div>
+
+					<div class="status">
+						Failed
+					</div>
+
+					<div class="button">
+						Try Again
+					</div>
+
+					<div class="errorInfo">
+
+						<div class="subtitle">
+							<span>What Went Wrong</span>
+						</div>
+
+						<div
+							ng-repeat="stackItem in testResults.getError().getStackTrace()"
+							title="{{ stackItem.filePath }}"
+							class="file">
+
+							{{ stackItem.fileName }} : Line {{ stackItem.lineNumber }}
+
+						</div>
+
+						<div class="message">
+							{{ testResults.getError().getErrorMessage() }}
+						</div>
+
+					</div>
+
+				</button>
+
+			</div>
+			<!-- END: Test Status. -->
+
+
+		</div>
+		<!-- END: Status Output. -->
+
+
+		<!-- Make sure the user actually has test cases to run. -->
+		<div ng-switch=" !! testCases.length ">
+
+			<!-- BEGIN: Test List. -->
+			<div ng-switch-when="true" class="testList">
+
+				<div class="header">
+
+					<div class="title">
+						<span class="text">You Have {{ testCases.length }} Test Cases</span>
+						<span class="selectAll">( <a ng-click="selectAllTestCases()">Select All</a> )</span>
+					</div>
+
+					<input type="text" ng-model="form.filter" placeholder="Filter test cases" tabindex="1" class="filter" />
+
+				</div>
+
+				<ol class="tests">
+
+					<li ng-repeat="testCase in testCases | filter:{name:form.filter}" class="test">
+
+						<label>
+
+							<input type="checkbox" ng-model="testCase.isSelected" />
+
+							{{ testCase.name }}
+
+						</label>
+
+					</li>
+
+				</ol>
+
+			</div>
+			<!-- END: Test List. -->
+
+
+			<!-- BEGIN: No Test List. -->
+			<div ng-switch-when="false" class="noTestList">
+
+				<strong>Oops</strong>: There are no test cases in your "specs" directory.<br />
+
+				See the <a href="./README.md">Readme.md</a> file for instructions.
+
+			</div>
+			<!-- END: No Test List. -->
+
+		</div>
+
+
+		<!-- BEGIN: Auto-Run. -->
+		<label tt-auto-run for="autorun" class="autorun" ng-class="{ on: form.autoRun }">
+
+			<input id="autorun" type="checkbox" ng-model="form.autoRun" />
+
+			Auto-run tests when window is focused.
+
+		</label>
+		<!-- END: Auto-Run. -->
+
+
+	</form>
+	<!-- END: Form. -->
+
+
+	<!-- BEGIN: Processing Overlay. -->
+	<div tt-processing-overlay class="ng-cloak processingOverlay">
+
+		<div class="message">
+
+			<div class="plan">
+				Running <span class="count">{{ selectedTestCases.length }}</span> Test Cases
+			</div>
+
+			<div class="patience">
+				Get ready to refactor...
+			</div>
+
+		</div>
+
+	</div>
+	<!-- END: Processing Overlay. -->
+
+
+</body>
+</html>

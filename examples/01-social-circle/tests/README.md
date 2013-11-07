@@ -34,9 +34,9 @@ Tiny Test JS application:
 ```JavaScript
 // Configure the path mappings for the modules in your application.
 require.config({
+	baseUrl: "../../app/model",
 	paths: {
-		app: "../../app",
-		lib: "../../app/lib"
+		/* Moar paths! */
 	}
 });
 
@@ -123,6 +123,17 @@ test methods._
 
 If you want to add your own custom assertions, feel free to add them to the TestCase.js
 module provided in the specs directory.
+
+Sometimes, you don't want to assert a success - you want to assert that something failed.
+That is, you want to test a use-case that should break and then assert that it actually 
+broke. This way, failures don't leak into your application. For this scenario, Tiny Test 
+JS provides:
+
+* this.assertFail( callback )
+
+The test harness will execute your callback and expect it to raise an exception. If the
+callback runs successfully, the test will fail. The callback is executed in the context
+of your test case.
 
 Inside of your custom assertions, you can make use of the private method, this.fail(), 
 which is how Tiny Test JS tracks exceptions:

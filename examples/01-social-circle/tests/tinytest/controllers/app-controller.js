@@ -73,10 +73,16 @@ require.tinytest.controller(
 
 			$scope.isRunningTests = true;
 
-			// Load and run the test cases. Each test case will be given a unique URL so that 
-			// RequireJS will be forced to reload them each time.
+			// Load and run the test cases.
 			require(
-				getTestCaseModuleUrls( testCases ),
+				_.map(
+					testCases,
+					function( testCase ) {
+
+						return( "tt_specs/" + testCase.name );
+
+					}
+				),
 				function successCallback() {
 
 					$scope.isRunningTests = false;
@@ -140,27 +146,6 @@ require.tinytest.controller(
 			);
 
 			return( testCases );
-
-		}
-
-
-		// I build a collection of cache-busting URLs for the given, selected test cases. The 
-		// cache-busting ensures that RequireJS will reload the given script each time it is
-		// requested, rather than pulling it out of the module cache.
-		function getTestCaseModuleUrls( testCases ) {
-
-			var now = ( new Date() ).getTime();
-
-			var testCaseUrls = _.map(
-				testCases,
-				function( testCase ) {
-
-					return( "specs/" + testCase.name + ".js?ttTestCaseBust=" + now );
-
-				}
-			);
-
-			return( testCaseUrls );
 
 		}
 

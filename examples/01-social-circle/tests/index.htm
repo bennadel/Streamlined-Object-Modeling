@@ -27,39 +27,46 @@
 		// -------------------------------------------------------------------------------- //
 		// -------------------------------------------------------------------------------- //
 
+		// Get the absolute path to the curernt directory. This way, RequireJS won't depend on
+		// the baseUrl configuration for loading the paths required for the internal TinyTestJS
+		// script files. This allows the tests to set their the baseUrl for use with loading the
+		// target application files.
+		var currentDirectory = location.pathname.replace( /[^\\/]*$/i, "" );
+
 		// Set up the configuration for the test suite application.
 		// --
-		// NOTE: urlArgs are intended to bust the cache while in development and on GitHub.
-		// GitHub has some strong caching rules and JS files get cached for a while.
+		// NOTE: urlArgs are intended to bust the browser cache while in development and on 
+		// GitHub. GitHub has some strong caching rules and JS files get cached for a while, 
+		// even when the user hard-refreshes the browser.
 		require.config({
 			paths: {
-				angular: "tinytest/vendor/angular/angular-1.0.8.min",
-				jquery: "tinytest/vendor/jquery/jquery-2.0.3.min",
-				lodash: "tinytest/vendor/lodash/lodash-2.2.1.min",
-				specs: "specs",
-				printstacktrace: "tinytest/vendor/stacktrace/stacktrace",
-				tinytest: "tinytest"
+				tt_angular: ( currentDirectory + "tinytest/vendor/angular/angular-1.0.8.min" ),
+				tt_jquery: ( currentDirectory + "tinytest/vendor/jquery/jquery-2.0.3.min" ),
+				tt_lodash: ( currentDirectory + "tinytest/vendor/lodash/lodash-2.2.1.min" ),
+				tt_specs: ( currentDirectory + "specs" ),
+				tt_printstacktrace: ( currentDirectory + "tinytest/vendor/stacktrace/stacktrace" ),
+				tt_tinytest: ( currentDirectory + "tinytest" )
 			},
 			shim: {
-				angular: {
-					deps: [ "jquery" ],
+				tt_angular: {
+					deps: [ "tt_jquery" ],
 					exports: "angular"
 				},
-				printstacktrace: {
+				tt_printstacktrace: {
 					exports: "printStackTrace"
 				}
 			},
-			urlArgs: ( "ttCacheBust=" + ( new Date() ).getTime() )
+			urlArgs: ( "tt_cache_bust=" + ( new Date() ).getTime() )
 		});
 
 		// Load the core libraries, including the AngularJS module.
 		require(
 			[ 
-				"lodash",
-				"jquery",
-				"angular",
-				"printstacktrace",
-				"specs/TestCase"
+				"tt_lodash",
+				"tt_jquery",
+				"tt_angular",
+				"tt_printstacktrace",
+				"tt_specs/TestCase"
 			],
 			function( lodash, jquery, angular, printStackTrace, proxyTestCase ) {
 
@@ -88,16 +95,16 @@
 				// then bootstrap this baby beast.
 				require(
 					[
-						"tinytest/beans/test-case",
-						"tinytest/beans/test-error",
-						"tinytest/beans/test-results",
-						"tinytest/beans/test-suite",
-						"tinytest/controllers/app-controller",
-						"tinytest/directives/auto-run",
-						"tinytest/directives/global-error-handler",
-						"tinytest/directives/processing-overlay",
-						"tinytest/services/require",
-						"tinytest/services/stacktrace"
+						"tt_tinytest/beans/test-case",
+						"tt_tinytest/beans/test-error",
+						"tt_tinytest/beans/test-results",
+						"tt_tinytest/beans/test-suite",
+						"tt_tinytest/controllers/app-controller",
+						"tt_tinytest/directives/auto-run",
+						"tt_tinytest/directives/global-error-handler",
+						"tt_tinytest/directives/processing-overlay",
+						"tt_tinytest/services/require",
+						"tt_tinytest/services/stacktrace"
 					],
 					function requireSuccessCallback() {
 

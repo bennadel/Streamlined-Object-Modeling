@@ -1,19 +1,17 @@
-// Configure the path mappings for the modules in your application. These paths
-// are relative to the current directory (which probably called something like
-// "tests/" or "tests/client/"). These path-prefixes can be used to load dependencides
-// in the test-cases located within the "specs/" directory.
-// --
-// NOTE: Exclude the trailing forward-slash.
+// Configure the base path and and additional path mappings for the modules in your 
+// application. This allows your target modules to load dependencies relative to the
+// paths they would normally use.
 require.config({
+	baseUrl: "../model/",
 	paths: {
-		app: "../../app",
-		lib: "../../app/lib"
+		lodash: "../../vendor/lodash/lodash-2.2.1",
+	},
+	shim: {
+		lodash: {
+			exports: "_"
+		}
 	}
 });
-
-// NOTE: TinyTestJS makes the "lodash" and "jquery" modules available via the "lodash"
-// and "jquery" handles, respectively. It will also call .noConflict() on these modules
-// in case your application already requires lodash, underscore, or the jQuery libraries.
 
 // Since JavaScript cannot read the local file-system, you have to tell TinyTest.js
 // which test-cases that it can find in the "specs/" directory. You will only be 
@@ -21,6 +19,7 @@ require.config({
 // --
 // NOTE: Exclude the trailing ".js" file extension.
 require.specs = [
-	"ExampleOfGoodTest",
-	"ExampleOfNotGoodTest"
+	"DateOfBirthTest",
+	"PersonTest",
+	"SocialCircleTest"
 ];

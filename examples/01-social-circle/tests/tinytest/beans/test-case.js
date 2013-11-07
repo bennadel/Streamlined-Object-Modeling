@@ -43,6 +43,25 @@ require.tinytest.factory(
 			},
 
 
+			// I test to make sure an error is raised inside the given callback.
+			assertFail: function( callback ) {
+
+				try {
+
+					callback.call( this );
+
+				} catch ( error ) {
+
+					return;
+
+				}
+
+				// If I made it this far, no error was raised.
+				this.fail( "Expected a failure." );
+
+			},
+
+
 			// I test to see if the supplied value is equal to False.
 			assertFalse: function( value ) {
 
